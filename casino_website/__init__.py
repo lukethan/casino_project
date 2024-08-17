@@ -6,7 +6,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='balderdash',
-        DATABASE=os.path.join(app.instance_path, 'project.sqlite'),
+        DATABASE=os.path.join(app.instance_path, 'casino_website.sqlite'),
     )
 
     if test_config is None:
@@ -19,8 +19,11 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    from . import db
+    db.init_app(app)
+
     @app.route("/test")
     def test():
         return("Success!")
-
+    
     return app
