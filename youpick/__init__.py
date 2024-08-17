@@ -1,13 +1,17 @@
 import os
 
 from flask import Flask
+from dotenv import load_dotenv
+    
+load_dotenv()
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='balderdash',
-        DATABASE=os.path.join(app.instance_path, 'youpick.sqlite'),
+        SECRET_KEY = os.getenv('SECRET_KEY'),
+        DATABASE = os.path.join(app.instance_path, os.getenv('DATABASE_NAME')),
+        DEBUG=os.getenv('FLASK_ENV') == 'development'
     )
 
     if test_config is None:
@@ -19,6 +23,7 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
 
     from . import db
     db.init_app(app)
