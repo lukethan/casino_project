@@ -1,2 +1,2 @@
-# CS_ino_50
+# YouPick
 ### CS50x Final Project
