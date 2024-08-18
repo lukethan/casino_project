@@ -34,6 +34,12 @@ def create_app(test_config=None):
     @app.route("/test")
     def test():
         return("Success!")
+        
+    from . import blog
+    app.register_blueprint(blog.bp)
+    app.add_url_rule('/')
+    #app.add_url_rule('/', endpoint='index')
+
     
 
     
