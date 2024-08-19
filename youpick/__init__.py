@@ -35,8 +35,8 @@ def create_app(test_config=None):
     def test():
         return("Success!")
         
-    from . import blog
-    app.register_blueprint(blog.bp)
+    from . import picks
+    app.register_blueprint(picks.bp)
     app.add_url_rule('/', endpoint='index')
 
     
