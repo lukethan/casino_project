@@ -420,3 +420,7 @@ img {
          font-size: 32px;
      }
 }
+
+label {
+    margin-bottom:8px;
+}

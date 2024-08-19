@@ -9,6 +9,7 @@ from youpick.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+#Used flask tutorial code for this
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
@@ -35,11 +36,12 @@ def register():
                 return redirect(url_for("auth.login"))
 
         flash(error)
+        #I like how each conditional sets the value of error but waits to the end to flash
 
     return render_template('auth/register.html')
 
 
-
+#Used flask tutorial code for this
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -50,7 +52,7 @@ def login():
         user = db.execute(
             'SELECT * FROM user WHERE username = ?', (username,)
         ).fetchone()
-
+        #Useful for speeding up query and not having to [0]["key"] every time
         if user is None:
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
@@ -65,6 +67,7 @@ def login():
 
     return render_template('auth/login.html')
 
+#sets the g value that was defined in db
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -80,6 +83,7 @@ def load_logged_in_user():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+#same as finance assignment
 
 def login_required(view):
     @functools.wraps(view)
@@ -88,5 +92,6 @@ def login_required(view):
             return redirect(url_for('auth.login'))
 
         return view(**kwargs)
+    #kwargs is used because we don't know how many key word args we will have for a given function
 
     return wrapped_view

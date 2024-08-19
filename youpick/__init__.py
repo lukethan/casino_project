@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, redirect, render_template, url_for
 from dotenv import load_dotenv
     
 load_dotenv()
@@ -31,9 +31,9 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
-    @app.route("/test")
-    def test():
-        return("Success!")
+    @app.route("/")
+    def index():
+        return render_template('auth/login.html')
         
     from . import picks
     app.register_blueprint(picks.bp)
