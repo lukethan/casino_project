@@ -203,10 +203,13 @@ button, input[type="submit"] {
     vertical-align: middle;
 }
 
+input::placeholder {
+    text-align: left;
+}
 
 input[type="text"] {
     line-height: 1.8;
-    width: 25%;
+    width: 50%;
 }
 
 input[type="text"]:hover {
@@ -424,3 +427,40 @@ img {
 label {
     margin-bottom:8px;
 }
+
+/* Post CSS taken from Flask Tutorial Website */
+article.post {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #04AA6D;
+    width: 50%;
+    min-height: 150px;
+}
+.post > header { 
+    display: flex; 
+    align-items: flex-end; 
+    font-size: 0.85em; 
+    color: white; 
+    background-color: green;
+    height: 50px;
+    width: 100%;
+}
+.post > header > div:first-of-type { 
+    flex: auto;
+    color: white; 
+}
+.post > header h1 { 
+    font-size: 1.5em;
+    margin-bottom: 0; 
+    color: white; 
+}
+.post .about { 
+    color: white; 
+    font-style: italic; 
+}
+.post .body { 
+    white-space: pre-line;
+    font-size: 18px;
+}
+
