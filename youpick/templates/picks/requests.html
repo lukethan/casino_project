@@ -1,13 +1,26 @@
 {% extends 'layout.html' %}
 
 {% block header %}
-  <h1>{% block title %}Request{% endblock %}</h1>
+  <h1>{% block title %}Requests{% endblock %}</h1>
 {% endblock %}
 
 {% block main %}  
-  <h1 style="margin-bottom:10px">Welcome {{ g.user["username"].capitalize() }}!</h1>
+  <h1 style="margin-bottom:10px">Send a Request!</h1>
 
-  <div class="mb-3" style="display:flex;justify-content:space-between;margin:40px">
-    ...
-  </div>
+  <div class="container">
+    <form method="post" action="/requests">
+        <div class="mb-3" style="margin-top:40px">
+          <input autofocus id="requests_title" name="requests_title" type="text" placeholder="Enter Title" autocomplete="off" style="width:25%">
+        </div>
+        <div class="mb-3" style="margin-top:10px">
+          <input id="requests_body" name="requests_body" type="text" placeholder="Enter Body" autocomplete="off" style="height:200px">
+        </div>
+        <div class="mb-3"  style="margin-top:10px">
+          <input id="receive_user" name="receive_user" type="text" placeholder="Enter Recipient's Username" autocomplete="off">
+        </div>
+        <div>
+          <button class="btn btn-primary" type="submit" style="margin-top:50px; background-color:green">Create Post</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

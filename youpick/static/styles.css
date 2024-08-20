@@ -430,7 +430,6 @@ label {
 
 /* Post CSS taken from Flask Tutorial Website */
 article.post {
-    align-items: center;
     display: flex;
     flex-direction: column;
     border: 1px solid #04AA6D;
@@ -461,6 +460,8 @@ article.post {
 }
 .post .body { 
     white-space: pre-line;
-    font-size: 18px;
+    font-size: 22px;
+    text-align: left !important;
+    margin: 15px;
 }
 
