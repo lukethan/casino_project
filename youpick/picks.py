@@ -50,17 +50,18 @@ def requests():
             error = "Please select a recipient other than yourself"
         if error == None:
             db = get_db()
-            print (receive_user1)
             receive_id = db.execute('SELECT username FROM users WHERE username = ?', (receive_user1,)).fetchone()
             if not receive_id:
                 error = "Please enter valid recipient username"
             else:
-                db.execute('INSERT INTO picks (user_id, title, body)' 'VALUES(?,?,?)', (g.user["id"], title, body))
+                db.execute('INSERT INTO picks (user_id, title, body)' 'VALUES(?,?,?)', ((g.user["id"], title, body)))
                 db.commit()
-                picks_id = db.execute('SELECT id FROM picks WHERE user_id = ?', g.user["id"])
-                db.execute('INSERT INTO location (id, locate)' 'VALUES(?, ?)', picks_id, "private")
+                result = db.execute('SELECT id FROM picks WHERE user_id = ?', (g.user["id"],)).fetchone()
+                picksid = result[0]
+                db.execute('INSERT INTO location (pick_id, locate)' 'VALUES(?, ?)', (picksid, "private"))
                 db.commit()
-                db.execute('INSERT INTO requests (request_id, receive_id)' 'VALUES(?, ?)', g.user["id"], receive_id)
+                print(type(receive_id))
+                db.execute('INSERT INTO requests (request_id, receive_id) VALUES(?, ?)', (g.user["id"], picksid))
                 db.commit()
                 return redirect("/")
         flash (error)
