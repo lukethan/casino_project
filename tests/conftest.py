@@ -2,8 +2,8 @@ import os
 import tempfile
 
 import pytest
-from flaskr import create_app
-from flaskr.db import get_db, init_db
+from youpick import create_app
+from youpick.db import get_db, init_db
 
 with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
     _data_sql = f.read().decode('utf8')
@@ -38,3 +38,25 @@ def client(app):
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
+#Allows for testing CLI commands
+
+#Pytest matches fixtures with test functions. The client is the argument passed to test function
+
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, username='test', password='test'):
+        return self._client.post(
+            '/auth/login',
+            data={'username': username, 'password': password}
+        )
+
+    def logout(self):
+        return self._client.get('/auth/logout')
+
+
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)
+#passes login check to each test using the class written above
