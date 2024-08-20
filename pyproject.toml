@@ -1,0 +1,11 @@
+[project]
+name = "youpick"
+version = "1.0.0"
+description = "A basic app for requesting what someone wants to do or eat, responses shown after both parties enter something"
+dependencies = [
+    "flask",
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

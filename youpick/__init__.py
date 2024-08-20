@@ -31,9 +31,9 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
-    @app.route("/")
-    def index():
-        return render_template('auth/login.html')
+    @app.route("/test")
+    def test():
+        return b"Success!"
         
     from . import picks
     app.register_blueprint(picks.bp)

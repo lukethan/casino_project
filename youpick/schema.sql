@@ -1,6 +1,8 @@
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS picks;
 DROP TABLE IF EXISTS requests;
+DROP TABLE IF EXISTS location;
+
 
 CREATE TABLE users (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,6 +16,7 @@ CREATE TABLE picks (
   time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   title TEXT NOT NULL UNIQUE,
   body TEXT NOT NULL,
+  response TEXT,
   FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
@@ -27,4 +30,11 @@ CREATE TABLE requests (
     UNIQUE (request_id, receive_id, status)
     -- I used CHATGpt to help with the UNIQUE line as I didn't want duplicate requests
     -- I also asked it how to ensure the status was one of 3 predefined values
+);
+
+CREATE TABLE location (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    picks_id INTEGER NOT NULL,
+    locate TEXT CHECK(status IN('main', 'private')) NOT NULL DEFAULT 'main',
+    FOREIGN KEY (picks_id) REFERENCES picks (id)
 );
