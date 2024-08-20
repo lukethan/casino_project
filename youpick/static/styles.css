@@ -22,7 +22,7 @@ a:hover {
 header {
     padding: 0 20px;
     background-color: black;
-    height: 50px;
+    height: 75px;
     display: flex;
     justify-content: space-between;
 }
@@ -248,7 +248,7 @@ input[type="text"]:hover {
     flex-direction: column;
     background-color: #04AA6D;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     padding: 20px;
 }
 
@@ -273,7 +273,7 @@ input[type="text"]:hover {
 .mobile {
     display: none;
     position: absolute;
-    top: 50px;
+    top: 75px;
     left: 0;
     height: calc(100vh - 50px);
     width: 100%;

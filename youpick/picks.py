@@ -8,7 +8,8 @@ from youpick.db import get_db
 
 bp = Blueprint('picks', __name__)
 
-@bp.route("/picks")
+@bp.route("/")
+@login_required
 def index():
     if request.method == "GET":
         return render_template("picks/index.html")

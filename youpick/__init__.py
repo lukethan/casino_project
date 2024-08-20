@@ -33,7 +33,7 @@ def create_app(test_config=None):
 
     @app.route("/test")
     def test():
-        return b"Success!"
+        return "Success!"
         
     from . import picks
     app.register_blueprint(picks.bp)

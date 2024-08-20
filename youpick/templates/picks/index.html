@@ -4,7 +4,6 @@
   <h1>{% block title %}Index{% endblock %}</h1>
 {% endblock %}
 
-{% block main %}
-    <h1 style="margin-bottom:10px">Welcome {{ username }}!</h1>
-    
+{% block main %}  
+  <h1 style="margin-bottom:10px">Welcome {{ g.user["username"].capitalize() }}!</h1>
 {% endblock %}

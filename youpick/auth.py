@@ -10,7 +10,7 @@ from youpick.db import get_db
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 #Sets up the prefix auth for all routes in this module
 
-#Used the tutorital from flask documentation for the auth setup
+#Used the tutorial from flask documentation for the auth setup
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
@@ -54,7 +54,7 @@ def login():
         db = get_db()
         error = None
         user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
+            'SELECT * FROM users WHERE username = ?', (username,)
         ).fetchone()
         #This is phenomenal in terms of speeding up query and allowing for easier variable setting
         #It is annoying to specify var = [0]["key"] every time
@@ -83,7 +83,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+            'SELECT * FROM users WHERE id = ?', (user_id,)
         ).fetchone()
         #I like the g variable being used here if there is a session
 
