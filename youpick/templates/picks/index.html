@@ -4,16 +4,21 @@
   <h1>{% block title %}Index{% endblock %}</h1>
 {% endblock %}
 
-{% block main %}  
-  <h1 style="margin-bottom:10px">Welcome {{ g.user["username"].capitalize() }}!</h1>
+  {% block header2 %}
+    <div class="container" style="display: flex; flex-direction: column; align-items: center; margin-top: 30px;">
+      <h1 style="margin-bottom:10px">Welcome {{ g.user["username"].capitalize() }}!</h1>
 
-  <div class="mb-3" style="display:flex;justify-content:center; margin:40px">
-    <form method="get" action="/make"><button style="background-color:green; padding-inline: 10%; margin-inline: 10px;" class="btn btn-primary">Create a Post</button></form>
-    <form method="get" action="/requests"><button style="background-color:green; padding-inline: 10%; margin-inline: 10px;" class="btn btn-primary">Send a Message</button></form>
-  </div>
+      <div class="mb-3" style="display:flex;justify-content:center; margin:30px">
+        <form method="get" action="/make"><button style="background-color:green; padding-inline: 10%; margin-inline: 20px;" class="btn btn-primary">Create a Post</button></form>
+        <form method="get" action="/requests"><button style="background-color:green; padding-inline: 10%; margin-inline: 20px;" class="btn btn-primary">Send a Message</button></form>
+      </div>
+    </div>
+  {% endblock %}
+  
 
+  {% block index %}  
   {% for post in picks %}
-    <!-- HTML Layout taken from Flask Tutorial -->
+  <!-- HTML Layout taken from Flask Tutorial -->
     <div class="container" style="display: flex; flex-direction: column; align-items: center;">
       <article class="post">
         <header>
@@ -29,4 +34,4 @@
       {% endif %}
     </div>
   {% endfor %}
-{% endblock %}
+  {% endblock %}

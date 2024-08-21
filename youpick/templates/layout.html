@@ -48,10 +48,17 @@
         {{ get_flashed_messages() | join(" ") }}
       </div>
     {% endif %}
+    {% if page == "index" %}
+      {% block header2 %}{% endblock %}
+      <div class="background_wrapper">
+      {% block index %}{% endblock %}
+    {% else %}
 
+      </div>
     <main class="container py-5 text-center">
     {% block main %}{% endblock %}
     </main>
+    {% endif %}
       <script src="/static/scripts.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>

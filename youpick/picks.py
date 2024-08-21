@@ -13,7 +13,7 @@ bp = Blueprint('picks', __name__)
 def index():
     db = get_db()
     picks = db.execute("SELECT * FROM picks ORDER BY time DESC").fetchall()
-    return render_template("picks/index.html", picks=picks)
+    return render_template("picks/index.html", picks=picks, page="index")
     
 @bp.route("/make", methods=('GET', 'POST'))
 @login_required
