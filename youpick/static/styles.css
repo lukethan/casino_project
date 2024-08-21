@@ -465,3 +465,23 @@ article.post {
     margin: 15px;
 }
 
+.btn.btn-primary {
+    background-color: #04AA6D;
+}
+
+#pwordconfirm {
+    gap: 3px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container.py-5.text-center {
+    background-color: lightblue;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    width: 45%;
+    min-width: 350px;
+
+}
