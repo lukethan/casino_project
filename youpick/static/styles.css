@@ -506,3 +506,7 @@ article.post {
     padding-top: 10px;
     padding-bottom: 20px;
 }
+
+.background_wrapper:empty {
+    display: none;
+}
