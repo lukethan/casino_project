@@ -53,10 +53,14 @@ def requests():
             id_receive = db.execute('SELECT id FROM users WHERE username = ?', (receive_user1,)).fetchone() 
             if id_receive == None:
                 error = "Please enter valid recipient username"
+                flash (error)
+                return render_template("picks/requests.html")
             prevrequest = db.execute('SELECT * FROM requests WHERE request_id =? AND receive_id = ?', (id_receive["id"], g.user["id"])).fetchone()
             if prevrequest != None:
-                db.execute('UPDATE requests SET status = ? WHERE requests.id = ?', ("accepted", prevrequest[id]))
-                db.execute('INSERT INTO requests (request_id, receive_id, status) VALUES(?, ?, ?)', (g.user["id"], id_receive["id"], "accepted"))
+                if prevrequest["status"] != "accepted":
+                    db.execute('UPDATE requests SET status = ? WHERE requests.id = ?', ("accepted", prevrequest["id"]))
+                    db.execute('INSERT INTO requests (request_id, receive_id, status) VALUES(?, ?, ?)', (g.user["id"], id_receive["id"], "accepted"))
+                db.execute('INSERT INTO private (user_id, recipient_id, title, body) VALUES(?, ?, ?, ?)', ((g.user["id"], id_receive["id"], title, body)))
                 db.commit()
                 return redirect("/")
             try:
@@ -68,6 +72,10 @@ def requests():
                     error = "Request still pending!"
                 elif status["status"] == "rejected":
                     error = "Your request has been rejected"
+                else:  
+                    db.execute('INSERT INTO private (user_id, recipient_id, title, body) VALUES(?, ?, ?, ?)', ((g.user["id"], id_receive["id"], title, body)))
+                    db.commit()
+                    return redirect("/")
             if error == None:
                 db.execute('INSERT INTO private (user_id, recipient_id, title, body) VALUES(?, ?, ?, ?)', ((g.user["id"], id_receive["id"], title, body)))
                 db.commit()
