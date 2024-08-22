@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  <h1>{% block title %}Private{% endblock %}</h1>
+{% endblock %}
+
+
+{%block main %}
+    {% for person in pending %}
+        <ul>
+            <li>{{ person.username }}</li>
+        </ul>
+    {% endfor %}
+{% endblock %}
+
+  
+
+
+  <!--Post Requests  -->
+{% block header2 %}
+<div class="container" style="display: flex; flex-direction: column; align-items: center; margin-top: 30px;">
+<h1 style="margin-bottom:10px">Private Messages</h1>
+
+<div class="mb-3" style="display:flex;justify-content:center; margin:30px">
+    <form method="get" action="/make"><button style="background-color:green; padding-inline: 10%; margin-inline: 20px;" class="btn btn-primary">Create a Post</button></form>
+    <form method="get" action="/requests"><button style="background-color:green; padding-inline: 10%; margin-inline: 20px;" class="btn btn-primary">Send a Message</button></form>
+</div>
+</div>
+{% endblock %}
+
+{% block index %}  
+{% for post in private %}
+<!-- HTML Layout taken from Flask Tutorial -->
+<div class="container" style="display: flex; flex-direction: column; align-items: center;">
+    <article class="post">
+    <header>
+        <div>
+        <h1>{{ post['title'] }}</h1>
+        <div class="about">by {{ post['username'] }} on {{ post['time'].strftime('%Y-%m-%d') }}</div>
+        </div>
+    </header>
+    <p class="body">{{ post['body'] }}</p>
+    </article>
+    {% if not loop.last %}
+    <hr style="width: 50%;">
+    {% endif %}
+</div>
+{% endfor %}
+{% endblock %}

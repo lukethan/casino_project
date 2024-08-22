@@ -48,14 +48,12 @@
         {{ get_flashed_messages() | join(" ") }}
       </div>
     {% endif %}
-    {% if page == "index" %}
+    {% if page == "index" or page == "private" %}
       {% block header2 %}{% endblock %}
       <div class="background_wrapper">
       {% block index %}{% endblock %}
       </div>
     {% else %}
-
-
     <main class="container py-5 text-center">
     {% block main %}{% endblock %}
     </main>

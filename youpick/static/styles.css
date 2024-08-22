@@ -61,11 +61,11 @@ ul li{
     padding: 5px;
     margin-left: 10px;
 }
-
+/* 
 ul li:hover {
     transform: scale(1.1);
     transition: .3s;
-}
+} */
 
 .active {
     color: green;
@@ -514,4 +514,9 @@ article.post {
 
 .background_wrapper:empty {
     display: none;
+}
+
+.pending ul li {
+    align-items: left;
+    text-align: left;
 }

@@ -13,7 +13,8 @@ bp = Blueprint('picks', __name__)
 def index():
     db = get_db()
     picks = db.execute("SELECT username, time, title, body FROM main JOIN users ON main.user_id = users.id ORDER BY time DESC").fetchall()
-    return render_template("picks/index.html", picks=picks, page="index")
+    pending = db.execute('SELECT username FROM users JOIN requests ON users.id = requests.request_id WHERE status = "pending" AND receive_id =?', (g.user["id"],))
+    return render_template("picks/index.html", main=picks, pending=pending, page="index")
     
 @bp.route("/make", methods=('GET', 'POST'))
 @login_required
@@ -83,3 +84,12 @@ def requests():
         flash (error)
     return render_template("picks/requests.html")
 
+@bp.route("/private", methods = ('GET','POST'))
+@login_required
+def private():
+    db = get_db()
+    if request.method == "POST":
+        return render_template("picks/private.html", page="private")
+    if request.method == "GET":
+        pending = db.execute('SELECT username FROM users JOIN requests ON users.id = request_id AND status == "pending"')
+        return render_template("picks/private.html", pending=pending)
