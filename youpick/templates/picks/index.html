@@ -19,7 +19,10 @@
         <h5>Pending Message Requests:</h5>
         {% for person in pending %}
           <ul class="pending">
-            <li>{{ person.username }}</li>
+            <li>{{ person.username }}
+            <form method="post"><input type="hidden" name="person_id" value="{{ person.id }}"><button type="submit" name="accept" class="btn btn-primary">Accept</button></form>
+            <form method="post"><input type="hidden" name="person_id" value="{{ person.id }}"><button type="submit" name="reject" class="btn btn-primary">Reject</button></form>
+            </li>
           </ul>
         {% endfor %}
       </div>

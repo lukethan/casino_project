@@ -8,13 +8,24 @@ from youpick.db import get_db
 
 bp = Blueprint('picks', __name__)
 
-@bp.route("/")
+@bp.route("/", methods = ("GET","POST"))
 @login_required
 def index():
     db = get_db()
-    picks = db.execute("SELECT username, time, title, body FROM main JOIN users ON main.user_id = users.id ORDER BY time DESC").fetchall()
-    pending = db.execute('SELECT username FROM users JOIN requests ON users.id = requests.request_id WHERE status = "pending" AND receive_id =?', (g.user["id"],))
-    return render_template("picks/index.html", main=picks, pending=pending, page="index")
+    if request.method == "GET":
+        picks = db.execute("SELECT username, time, title, body FROM main JOIN users ON main.user_id = users.id ORDER BY time DESC").fetchall()
+        pending = db.execute('SELECT username, users.id FROM users JOIN requests ON users.id = requests.request_id WHERE status = "pending" AND receive_id =?', (g.user["id"],))
+        return render_template("picks/index.html", main=picks, pending=pending, page="index")
+    if request.method == "POST":
+        person_id = request.form.get("person_id")
+        if "accept" in request.form:
+            db.execute("UPDATE requests SET status = ? WHERE receive_id = ? AND request_id = ?", ("accepted", g.user["id"], person_id))
+            db.commit()
+            return redirect('/')
+        if "reject" in request.form:
+            db.execute("UPDATE requests SET status = ? WHERE receive_id = ? AND request_id = ?", ("rejected", g.user["id"], person_id))
+            db.commit()
+            return redirect('/')
     
 @bp.route("/make", methods=('GET', 'POST'))
 @login_required
