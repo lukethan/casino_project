@@ -12,7 +12,7 @@ bp = Blueprint('picks', __name__)
 @login_required
 def index():
     db = get_db()
-    # picks = db.execute("SELECT (username, time, title, body) FROM picks, location, users WHERE locate != ? AND ///// ORDER BY time DESC", ("private",)).fetchall()
+    picks = db.execute("SELECT username, time, title, body FROM main JOIN users ON main.user_id = users.id ORDER BY time DESC").fetchall()
     return render_template("picks/index.html", picks=picks, page="index")
     
 @bp.route("/make", methods=('GET', 'POST'))
@@ -28,10 +28,7 @@ def make():
             error = "Please add a body"
         if error == None:
             db = get_db()
-            db.execute('INSERT INTO picks (user_id, title, body) VALUES(?,?,?)', (g.user["id"], title, body))
-            db.commit()
-            id_pick = db.execute('SELECT id FROM picks WHERE user_id = ?', (g.user["id"],)).fetchone()
-            db.execute('INSERT INTO location (pick_id) VALUES(?)', (id_pick))
+            db.execute('INSERT INTO main (user_id, title, body) VALUES(?,?,?)', (g.user["id"], title, body))
             db.commit()
             return redirect("/")
         flash (error)
@@ -53,18 +50,27 @@ def requests():
             error = "Please select a recipient other than yourself"
         elif error == None:
             db = get_db()
-            id_receive = db.execute('SELECT username, id FROM users WHERE username = ?', (receive_user1,)).fetchone() 
+            id_receive = db.execute('SELECT id FROM users WHERE username = ?', (receive_user1,)).fetchone() 
             if id_receive == None:
                 error = "Please enter valid recipient username"
-            else:
-                db.execute('INSERT INTO picks (user_id, title, body) VALUES(?,?,?)', ((g.user["id"], title, body)))
+            prevrequest = db.execute('SELECT * FROM requests WHERE request_id =? AND receive_id = ?', (id_receive["id"], g.user["id"])).fetchone()
+            if prevrequest != None:
+                db.execute('UPDATE requests SET status = ? WHERE requests.id = ?', ("accepted", prevrequest[id]))
+                db.execute('INSERT INTO requests (request_id, receive_id, status) VALUES(?, ?, ?)', (g.user["id"], id_receive["id"], "accepted"))
                 db.commit()
-                result = db.execute('SELECT id FROM picks WHERE user_id = ?', (g.user["id"],)).fetchone()
-                db.execute('INSERT INTO location (pick_id, locate)' 'VALUES(?, ?)', (result["id"], "private",))
+                return redirect("/")
+            try:
+                db.execute('INSERT INTO requests (request_id, receive_id) VALUES(?, ?)', (g.user["id"], id_receive["id"]))
                 db.commit()
-                if db.execute('SELECT request_id, receive_id FROM requests WHERE request_id = ? AND receive_id = ?', (g.user["id"], result["id"])).fetchone() == None:
-                    db.execute('INSERT INTO requests (request_id, receive_id) VALUES(?, ?)', (g.user["id"], result["id"]))
-                    db.commit()
+            except db.IntegrityError:
+                status = db.execute('SELECT status FROM requests WHERE request_id =? AND receive_id = ?', ((g.user["id"]), id_receive["id"])).fetchone()
+                if status["status"] == "pending":
+                    error = "Request still pending!"
+                elif status["status"] == "rejected":
+                    error = "Your request has been rejected"
+            if error == None:
+                db.execute('INSERT INTO private (user_id, recipient_id, title, body) VALUES(?, ?, ?, ?)', ((g.user["id"], id_receive["id"], title, body)))
+                db.commit()
                 return redirect("/")
         flash (error)
     return render_template("picks/requests.html")

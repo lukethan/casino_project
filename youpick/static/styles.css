@@ -435,10 +435,13 @@ label {
 article.post {
     display: flex;
     flex-direction: column;
-    border: 3px solid #04AA6D;
-    width: 100%;
+    /* border: 3px solid #04AA6D; */
+    border: 3px solid black;
+    margin-top: 10px;
+    width: 80%;
     padding-bottom: 30%;
     word-wrap:break-word;
+    margin-bottom: 10px;
 }
 .post > header { 
     display: flex; 
@@ -473,6 +476,7 @@ article.post {
 .btn.btn-primary {
     background-color: green;
     border-color: #212529;
+
 }
 
 #pwordconfirm {
@@ -495,6 +499,7 @@ article.post {
 }
 
 .background_wrapper {
+    /* background-color:#04AA6D; */
     background-color: lightblue;
     width: 50%;
     display: flex;

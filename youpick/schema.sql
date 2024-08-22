@@ -1,7 +1,10 @@
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS picks;
+DROP TABLE IF EXISTS main;
+DROP TABLE IF EXISTS private;
 DROP TABLE IF EXISTS requests;
+-- Old tables below
 DROP TABLE IF EXISTS location;
+DROP TABLE IF EXISTS picks;
 
 
 CREATE TABLE users (
@@ -10,14 +13,25 @@ CREATE TABLE users (
     password TEXT NOT NULL
 );
 
-CREATE TABLE picks (
+CREATE TABLE main (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     title TEXT NOT NULL,
     body TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE private (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    recipient_id INTEGER NOT NULL,
+    time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
     response TEXT,
     FOREIGN KEY (user_id) REFERENCES users (id)
+    FOREIGN KEY (recipient_id) REFERENCES users (id)
 );
 
 CREATE TABLE requests (
@@ -28,14 +42,9 @@ CREATE TABLE requests (
     CHECK(status IN ('pending', 'accepted', 'rejected')),
     FOREIGN KEY (request_id) REFERENCES users (id),
     FOREIGN KEY (receive_id) REFERENCES users (id),
-    UNIQUE (request_id, receive_id, status)
+    UNIQUE (request_id, receive_id)
     -- I used CHATGpt to help with the UNIQUE line as I didn't want duplicate requests
     -- I also asked it how to ensure the status was one of 3 predefined values
-);
-
-CREATE TABLE location (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    pick_id INTEGER NOT NULL,
-    locate TEXT CHECK(locate IN('main', 'private')) NOT NULL DEFAULT 'main',
-    FOREIGN KEY (pick_id) REFERENCES picks (id)
+    -- SELECT requests.*, user1.username AS sender, user2.username AS receiver FROM requests JOIN users AS user1 ON request_id = user1.id JOIN users as user2 ON receive_id = user2.id; 
+    -- Query to help find sender and receiver ^ chatgpt helped to come up with the query
 );
