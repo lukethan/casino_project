@@ -9,7 +9,7 @@
 {% block main2 %}
     <div class="container" style="display: flex; flex-direction: column; margin-top: 30px; padding-inline: 30px; flex-wrap: wrap; align-items: center; text-align: center;">
         <div class="mb-3" style="display:flex;align-items: center; margin:30px">
-            <h1 style="margin-bottom:10px">Welcome {{ g.user["username"].capitalize() }}!</h1>
+            <h1 style="margin-bottom:10px">Select a Private Message Thread</h1>
         </div>
 
     </div>
@@ -55,11 +55,31 @@
             <div class="about">-{% if post.type == 'incoming' %}{{ post.sender_user }}{% else %}{{ post.receiver_user }}{% endif %}</div>
           </div>
         </header>
-        <p class="body">{{ post['body'] }}</p>
-        <footer>
-          {{ post['time'].strftime('%m-%d-%Y') }}
-        </footer>
-      </article>
+        {% if post.type == 'incoming' %}
+            {% if not post['response'] %}
+                <form method="post" class="body"><input name="send_id" type="hidden" value="{{ post.sender_id }}"><textarea rows="4" cols="50" type="text" name="response" placeholder="Enter your response to see the message" style="width: 85% !important; height: 80px;"></textarea><br>
+                    <button class="btn btn-primary" name="response_button" type="submit">submit</button></form>
+                <footer>
+                    {{ post['time'].strftime('%m-%d-%Y') }}
+                  </footer>
+                </article>
+            {% else %}
+                <p class="body">{{ post['body'] }}</p>
+                <p class="body">My Response: {{ post['response'] }}</p>
+                <footer>
+                    {{ post['time'].strftime('%m-%d-%Y') }}
+                  </footer>
+                </article>
+            {% endif %}
+        {% else %}
+            <p class="body">{{ post['body'] }}</p>
+            <p class="body">{% if post['response'] %}Response: {{ post['response'] }}{% endif %}</p>
+            <footer>
+                {{ post['time'].strftime('%m-%d-%Y') }}
+              </footer>
+            </article>
+        {% endif %}
+
 
       <!-- {% if not loop.last %}
         <hr style="width: 50%;"> -->
@@ -67,4 +87,6 @@
     </div>
   <!-- </div> -->
 {% endfor %}
+<form method="post" action="/private"><button style="background-color:green" class="btn btn-primary">Back</button></form>
+
 {% endblock %}

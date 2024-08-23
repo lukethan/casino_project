@@ -100,6 +100,11 @@ def requests():
 def private():
     db = get_db()
     if request.method == "POST":
+        if "response_button" in request.form:
+            response = request.form.get("response")
+            send_id = request.form.get("send_id")
+            db.execute('UPDATE private SET response = ? WHERE recipient_id = ? AND user_id = ?',(response, g.user['id'], send_id))
+            db.commit()
         dm_to = db.execute('SELECT username, users.id FROM users JOIN requests ON users.id = requests.request_id WHERE status = "accepted" AND receive_id =?', (g.user["id"],)).fetchall()
         dm_from = db.execute('SELECT username, users.id FROM users JOIN requests ON users.id = requests.receive_id WHERE status = "accepted" AND request_id = ?', (g.user["id"],)).fetchall()
         dm_to_dict = {user['id']: user['username'] for user in dm_to}
@@ -108,9 +113,8 @@ def private():
         return render_template("picks/private.html", names=dm_names, page="main_private")
     if request.method == "GET":
         name = request.args.get("dm_id")
-        incoming = db.execute("SELECT users.username AS sender_user, time, title, body, 'incoming' AS type FROM private JOIN users ON private.user_id = users.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (name, g.user["id"])).fetchall()        
-        outgoing = db.execute("SELECT users.username AS receiver_user, time, title, body, 'outgoing' AS type FROM private JOIN users ON private.user_id = users.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (g.user["id"], name)).fetchall()
+        incoming = db.execute("SELECT users.username AS sender_user, users.id AS sender_id, time, title, body, response, 'incoming' AS type FROM private JOIN users ON private.user_id = users.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (name, g.user["id"])).fetchall()        
+        outgoing = db.execute("SELECT users.username AS receiver_user, users.id AS receiver_id, time, title, body, response, 'outgoing' AS type FROM private JOIN users ON private.user_id = users.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (g.user["id"], name)).fetchall()
         messages = incoming + outgoing
         messages = [dict(row) for row in incoming + outgoing]
-        print(messages)
         return render_template("picks/private.html", messages=messages, page="private")
