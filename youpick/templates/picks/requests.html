@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}  
-  <h1 style="margin-bottom:10px">Send a Request!</h1>
+  <h1 style="margin-bottom:10px">Send a Private Message!</h1>
 
   <div class="container">
     <form method="post" action="/requests">
@@ -13,7 +13,7 @@
           <input autofocus id="requests_title" name="requests_title" type="text" placeholder="Enter Title" autocomplete="off" style="width:25%">
         </div>
         <div class="mb-3" style="margin-top:10px">
-          <input id="requests_body" name="requests_body" type="text" placeholder="Enter Body" autocomplete="off" style="height:200px">
+          <textarea rows="4" cols="50" type="text" name="requests_body" placeholder="Type a message!" style="width: 85% !important; height: 80px;"></textarea>
         </div>
         <div class="mb-3"  style="margin-top:10px">
           <input id="receive_user" name="receive_user" type="text" placeholder="Enter Recipient's Username" autocomplete="off">
