@@ -50,10 +50,12 @@
     {% endif %}
     {% if page == "index" or page == "private" %}
       {% block header2 %}{% endblock %}
-      <div class="background_wrapper">
+      <!-- <div class="background_wrapper"> -->
       {% block index %}{% endblock %}
-      </div>
-    {% else %}
+      <!-- </div> -->
+    {% elif page == "main_private" %}
+      {% block main2 %}{% endblock %}
+    {% elif page != "main_private" %}
     <main class="container py-5 text-center">
     {% block main %}{% endblock %}
     </main>

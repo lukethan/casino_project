@@ -100,7 +100,17 @@ def requests():
 def private():
     db = get_db()
     if request.method == "POST":
-        return render_template("picks/private.html", page="private")
+        dm_to = db.execute('SELECT username, users.id FROM users JOIN requests ON users.id = requests.request_id WHERE status = "accepted" AND receive_id =?', (g.user["id"],)).fetchall()
+        dm_from = db.execute('SELECT username, users.id FROM users JOIN requests ON users.id = requests.receive_id WHERE status = "accepted" AND request_id = ?', (g.user["id"],)).fetchall()
+        dm_to_dict = {user['id']: user['username'] for user in dm_to}
+        dm_from_dict = {user['id']: user['username'] for user in dm_from}
+        dm_names = {**dm_from_dict, **dm_to_dict}
+        return render_template("picks/private.html", names=dm_names, page="main_private")
     if request.method == "GET":
-        pending = db.execute('SELECT username FROM users JOIN requests ON users.id = request_id AND status == "pending"')
-        return render_template("picks/private.html", pending=pending)
+        name = request.args.get("dm_id")
+        incoming = db.execute("SELECT users.username AS sender_user, time, title, body, 'incoming' AS type FROM private JOIN users ON private.user_id = users.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (name, g.user["id"])).fetchall()        
+        outgoing = db.execute("SELECT users.username AS receiver_user, time, title, body, 'outgoing' AS type FROM private JOIN users ON private.user_id = users.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (g.user["id"], name)).fetchall()
+        messages = incoming + outgoing
+        messages = [dict(row) for row in incoming + outgoing]
+        print(messages)
+        return render_template("picks/private.html", messages=messages, page="private")
