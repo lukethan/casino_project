@@ -616,22 +616,92 @@ grid-row: 1 /2;
 font-size: 1.3em;
 }
 
+.body-container-send {
+    display: grid;
+    grid-template-columns: .75fr 6.5fr;
+    grid-template-rows: 4fr;
+    align-items: center;
+}
 
+.body-container-reply {
+    display: grid;
+    grid-template-columns: 6.5fr .75fr;
+    grid-template-rows: 4fr;
+    align-items: center;
+    justify-items: end;
+
+}
+  
+  .circle-send {
+    grid-column: 1 / 2;
+    grid-row: 1 / 4;
+    /* color: black */
+    height: 50px;
+    width: 50px;
+    background-color: green;
+    border-radius: 50%;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 1.45em;
+}
+.circle-reply {
+    grid-column: 2 / 3;
+    grid-row: 1 / 4;
+    /* color: black */
+    height: 50px;
+    width: 50px;
+    background-color: green;
+    border-radius: 50%;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    font-size: 1.45em;
+}
+.title1-send {
+    grid-column: 2 / 3;
+    grid-row: 1 /4;
+    font-size: 1.3em;
+}
+
+.title1-reply {
+    grid-column: 1 / 2;
+    grid-row: 1 /4;
+    font-size: 1.3em;
+    }
+
+
+#private {
+    align-items: center;
+    text-align: center;
+}
+
+#privatetitle {
+    font-size: 1.3em;
+}
+
+#privatesend {
+    font-size: .9em;
+}
 
 @media only screen and (max-width: 1100px) {
-     .test-container {
+     .test-container, .body-container {
         grid-template-columns: 1fr 6.5fr;
     }
 }
 
 @media only screen and (max-width: 970px) and (min-width: 751px) {
-    .test-container {
+    .test-container, .body-container{
        grid-template-columns: 1.5fr 6.5fr;
    }
 }
 
 @media only screen and (max-width: 750px) {
-    .test-container {
+    .test-container, .body-container {
         grid-template-columns: 2.5fr 6.5fr;
     }
 

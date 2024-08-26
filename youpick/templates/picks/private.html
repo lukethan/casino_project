@@ -51,25 +51,37 @@
       {% if post.type == 'incoming' %}
         <div class="container" style="display: flex; flex-direction: column; align-items:flex-start;">
           <article class="post" style="background-color: darkgreen;">
-            <header style="background-color: darkgreen;">
+            <header id="private" style="background-color: darkgreen;">
               <div>
-                <div class="title-container">
-                  <div class="circle"><strong>{{ (post.sender_user[0]).capitalize() }}</strong></div>
-                  <div class="title1"><strong>{{ post['title'] }}</strong></div>
-                  <div class="name1">{{ (post.sender_user).capitalize() }}</div>
+                <div>
+                  <div class="title1" id="privatetitle"><strong>{{ post['title'] }}</strong></div>
+                  <div class="name1" id="privatesend">From {{ (post.sender_user).capitalize() }} to {{ (post.receiver_user).capitalize() }}</div>
                 </div>
               </div>
             </header>
             {% if post.response %}
-              <p class="body">{{ post['body'] }}</p>
-            {% else %}
-              <p class="body">**Hidden Until You Respond**</p>
+            <div class="body">
+              <div class="body-container-send">
+                <div class="circle-send"><strong>{{ (post.sender_user[0]).capitalize() }}</strong></div>
+                <div class="title1-send">{{ post.body }}</div>
+              </div>
+              <div class="body-container-reply">
+                <div class="circle-reply"><strong>{{ (post.receiver_user[0]).capitalize() }}</strong></div>
+                <div class="title1-reply">{{ post.response }}</div>
+              </div>
+            </div>
+            {% else %}             
+                  <form method="post" class="body">
+                    <input name="send_id" type="hidden" value="{{ post.sender_id }}">
+                    <textarea rows="4" cols="50" type="text" name="response" placeholder="Enter your response to see the message" style="width: 85% !important; height: 80px;"></textarea><br>
+                    <button class="btn btn-primary" name="response_button" type="submit">submit</button>
+                  </form>
             {% endif %}
             <footer>
               {{ post['time'].strftime('%m-%d-%Y') }}
             </footer>
           </article>
-
+<!-- 
           <div class="container" style="display: flex; flex-direction: column; align-items: flex-start;">
             <article class="post" style="background-color: darkgreen;">
               <header style="background-color: darkgreen;">
@@ -98,7 +110,7 @@
               {% endif %}
             </article>
           </div>
-        </div>
+        </div> -->
       {% else %}
         <div class="container" style="display: flex; flex-direction: column; align-items: flex-end;">
           <article class="post">
