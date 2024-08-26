@@ -104,7 +104,7 @@ body {
     line-height: 1.5;
     margin: 0;
     text-align: left;
-    height: 100%;
+    height: auto;
     min-height:100%;
 }
 

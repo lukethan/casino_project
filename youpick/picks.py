@@ -113,9 +113,8 @@ def private():
         return render_template("picks/private.html", names=dm_names, page="main_private")
     if request.method == "GET":
         name = request.args.get("dm_id")
-        # incoming = db.execute("SELECT users.username AS sender_user, users.id AS sender_id, time, title, body, response, 'incoming' AS type, recipient.username AS reciever_user FROM private JOIN users ON private.user_id = users.id JOIN users AS recipient ON private.recipient_id = recipient.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (name, g.user["id"])).fetchall()        
         incoming = db.execute("SELECT sender.username AS sender_user, sender.id AS sender_id, recipient.username AS receiver_user, private.time, private.title, private.body, private.response, 'incoming' AS type FROM private JOIN users AS sender ON private.user_id = sender.id JOIN users AS recipient ON private.recipient_id = recipient.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY private.time DESC", (name, g.user["id"])).fetchall()
-        outgoing = db.execute("SELECT users.username AS receiver_user, users.id AS receiver_id, time, title, body, response, 'outgoing' AS type FROM private JOIN users ON private.user_id = users.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (g.user["id"], name)).fetchall()
+        outgoing = db.execute("SELECT users.username AS receiver_user, users.id AS receiver_id, time, title, body, response, 'outgoing' AS type, sender.username AS sender_user FROM private JOIN users ON private.recipient_id = users.id JOIN users as sender ON private.user_id = sender.id WHERE private.user_id = ? AND private.recipient_id = ? ORDER BY time DESC", (g.user["id"], name)).fetchall()
         messages = incoming + outgoing
         messages = [dict(row) for row in incoming + outgoing]
         return render_template("picks/private.html", messages=messages, page="private")
