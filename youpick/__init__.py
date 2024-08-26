@@ -38,8 +38,5 @@ def create_app(test_config=None):
     from . import picks
     app.register_blueprint(picks.bp)
     app.add_url_rule('/', endpoint='index')
-
-    
-
     
     return app

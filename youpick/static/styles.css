@@ -482,7 +482,7 @@ article.post {
 }
 .post .body { 
     white-space: pre-line;
-    font-size: 1em;
+    font-size: 1.1em;
     text-align: left !important;
     margin: 15px 15px 35px 35px;
     flex: 1;
@@ -606,14 +606,14 @@ div h5 {
 .name1 {
 grid-column: 2 / 3;
 grid-row: 2 / 3;
-font-size: .9em;
+font-size: .8em;
 /* Add styles for the text containers */
 }
 
 .title1 strong {
 grid-column: 2 / 3;
 grid-row: 1 /2;
-font-size: 1.5 em;
+font-size: 1.3em;
 }
 
 
