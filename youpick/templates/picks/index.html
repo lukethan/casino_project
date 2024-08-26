@@ -39,9 +39,10 @@
       <div class="container" style="display: flex; flex-direction: column; align-items: center;">
         <article class="post">
           <header>
-            <div>
-              <h1>{{ post['title'] }}</h1>
-              <div class="about">-{{ (post['username']).capitalize() }}</div>
+            <div class="title-container">
+              <div class="circle"><strong>{{ (post['username'][0]).capitalize() }}</strong></div>
+              <div class="title1"><strong>{{ post['title'] }}</strong></div>
+              <div class="name1">{{ (post['username']).capitalize() }}</div>
             </div>
           </header>
           <p class="body">{{ post['body'] }}</p>
@@ -49,11 +50,6 @@
             {{ post['time'].strftime('%m-%d-%Y') }}
           </footer>
         </article>
-
-        <!-- {% if not loop.last %}
-          <hr style="width: 50%;"> -->
-        {% endif %}
       </div>
-    <!-- </div> -->
   {% endfor %}
   {% endblock %}
