@@ -14,6 +14,7 @@
     {% if g.user %}
       <nav>
         <ul>
+          <li><a href="{{ url_for('index') }}">Homepage</a></li>
           <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
         </ul>
       </nav>

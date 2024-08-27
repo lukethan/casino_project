@@ -5,6 +5,7 @@ from werkzeug.exceptions import abort
 
 from youpick.auth import login_required
 from youpick.db import get_db
+from collections import defaultdict
 
 bp = Blueprint('picks', __name__)
 
@@ -13,11 +14,37 @@ bp = Blueprint('picks', __name__)
 def index():
     db = get_db()
     if request.method == "GET":
-        picks = db.execute("SELECT username, time, title, body FROM main JOIN users ON main.user_id = users.id ORDER BY time DESC").fetchall()
+        picks = db.execute("SELECT post_author.id AS id, main.id AS post_id, post_author.username AS username, main.time AS time, title, body, comments.comment, comment_author.id AS commenter_id, comment_author.username AS commenter_username,  comments.time AS comment_time FROM main JOIN users AS post_author ON main.user_id = post_author.id LEFT JOIN comments ON comments.message_id = main.id LEFT JOIN users AS comment_author ON comments.commenter_id = comment_author.id ORDER BY main.time DESC, comments.time DESC").fetchall()
         pending = db.execute('SELECT username, users.id FROM users JOIN requests ON users.id = requests.request_id WHERE status = "pending" AND receive_id =?', (g.user["id"],))
-        return render_template("picks/index.html", main=picks, pending=pending, page="index")
+        # ChatGPT Start
+        posts_with_comments = defaultdict(lambda: {'post': None, 'comments': []})
+
+        for row in picks:
+            post_id = row['post_id']
+            if posts_with_comments[post_id]['post'] is None:
+                posts_with_comments[post_id]['post'] = {
+                    'user_id': row['id'],
+                    'post_id': row['post_id'],
+                    'username': row['username'],
+                    'post_time': row['time'],
+                    'title': row['title'],
+                    'body': row['body']
+                }
+            if row['comment']:
+                posts_with_comments[post_id]['comments'].append({
+                    'comment': row['comment'],
+                    'commenter_id': row['commenter_id'],
+                    'commenter_username' : row['commenter_username'],
+                    'comment_time': row['comment_time']
+                })
+        # Convert defaultdict to a list for easier rendering
+        posts_with_comments = list(posts_with_comments.values())
+        # ChatGPT end
+        return render_template("picks/index.html", main=posts_with_comments, pending=pending, page="index")
     if request.method == "POST":
         person_id = request.form.get("person_id")
+        post_id = request.form.get("post")
+        comment = request.form.get("comment_body")
         if "accept" in request.form:
             db.execute("UPDATE requests SET status = ? WHERE receive_id = ? AND request_id = ?", ("accepted", g.user["id"], person_id))
             db.commit()
@@ -26,6 +53,15 @@ def index():
             db.execute("UPDATE requests SET status = ? WHERE receive_id = ? AND request_id = ?", ("rejected", g.user["id"], person_id))
             db.commit()
             return redirect('/')
+        if "comment_submit" in request.form and comment != "":
+            db.execute("INSERT INTO comments (commenter_id, message_id, comment) VALUES (?, ?, ?)", (g.user["id"], post_id, comment))
+            db.commit()
+            return redirect('/')
+        elif "comment_submit" in request.form and comment == "":
+            flash("Please enter a valid comment")
+            return redirect('/')
+
+            
     
 @bp.route("/make", methods=('GET', 'POST'))
 @login_required

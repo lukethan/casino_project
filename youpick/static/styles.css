@@ -95,7 +95,6 @@ ul li:hover {
     margin-top: 2px;
 }
 
-
 body {
     background-color: #fff;
     color: #212529;
@@ -480,13 +479,21 @@ article.post {
     font-style: italic;
     font-size: .85em; 
 }
-.post .body { 
+.post .body, .post textarea, .post button { 
     white-space: pre-line;
     font-size: 1.1em;
-    text-align: left !important;
+    text-align: left;
     margin: 15px 15px 35px 35px;
     flex: 1;
     color: white;
+}
+
+.post textarea {
+    margin-bottom: 0px;
+    color: black;
+}
+.post button {
+    margin-top: 0px;
 }
 
 .btn.btn-primary {

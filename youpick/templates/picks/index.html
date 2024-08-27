@@ -33,21 +33,36 @@
   
 
   {% block index %}  
-  {% for post in main %}
+  {% for posts in main %}
   <!-- HTML Layout taken from Flask Tutorial -->
     <!-- <div class="background_wrapper"> -->
       <div class="container" style="display: flex; flex-direction: column; align-items: center;">
         <article class="post">
           <header>
             <div class="title-container">
-              <div class="circle"><strong>{{ (post['username'][0]).capitalize() }}</strong></div>
-              <div class="title1"><strong>{{ post['title'] }}</strong></div>
-              <div class="name1">{{ (post['username']).capitalize() }}</div>
+              <div class="circle"><strong>{{ (posts.post.username[0]).capitalize() }}</strong></div>
+              <div class="title1"><strong>{{ posts.post['title'] }}</strong></div>
+              <div class="name1">{{ (posts.post['username']).capitalize() }}</div>
             </div>
           </header>
-          <p class="body">{{ post['body'] }}</p>
+          <p class="body">{{ posts.post.body }}</p>
+          {% if posts.comments %}
+            <p style="text-align: right; margin-right: 30px; font-size: 1.2em;">Comments:</p>
+          {% endif %}
+          {% for comment in posts.comments %}
+            <div class="body-container-reply" style="margin: 10px 10px 0px 0px;">
+              <div class="circle-reply"><strong>{{ (comment.commenter_username[0]).capitalize() }}</strong></div>
+              <div class="title1-reply">{{ comment.comment }}</div>
+              <p style="font-size: .5em;">{{ (comment.comment_time).strftime('%m-%d-%Y' " at " '%H:%M' " (UTC)") }}</p>
+            </div>  
+          {% endfor %}
+          <form method="post">
+            <textarea rows="2" cols="30" type="text" name="comment_body" placeholder="Leave a Comment!" style="width: 85%; height: 40px;"></textarea>
+            <input type="hidden" value="{{ posts.post.post_id }}" name="post">
+            <button type="submit" name="comment_submit" class="btn btn-primary">Comment</button>
+          </form>
           <footer>
-            {{ post['time'].strftime('%m-%d-%Y') }}
+            {{ posts.post.post_time.strftime('%m-%d-%Y') }}
           </footer>
         </article>
       </div>

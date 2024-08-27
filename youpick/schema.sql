@@ -1,19 +1,19 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS main;
-DROP TABLE IF EXISTS private;
-DROP TABLE IF EXISTS requests;
--- Old tables below
-DROP TABLE IF EXISTS location;
-DROP TABLE IF EXISTS picks;
+-- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS main;
+-- DROP TABLE IF EXISTS private;
+-- DROP TABLE IF EXISTS requests;
+-- -- Old tables below
+-- DROP TABLE IF EXISTS location;
+-- DROP TABLE IF EXISTS picks;
 
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL
 );
 
-CREATE TABLE main (
+CREATE TABLE IF NOT EXISTS main (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -22,7 +22,7 @@ CREATE TABLE main (
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE private (
+CREATE TABLE IF NOT EXISTS private (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     recipient_id INTEGER NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE private (
     FOREIGN KEY (recipient_id) REFERENCES users (id)
 );
 
-CREATE TABLE requests (
+CREATE TABLE IF NOT EXISTS requests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     request_id INTEGER NOT NULL,
     receive_id INTEGER NOT NULL,
@@ -47,4 +47,14 @@ CREATE TABLE requests (
     -- I also asked it how to ensure the status was one of 3 predefined values
     -- SELECT requests.*, user1.username AS sender, user2.username AS receiver FROM requests JOIN users AS user1 ON request_id = user1.id JOIN users as user2 ON receive_id = user2.id; 
     -- Query to help find sender and receiver ^ chatgpt helped to come up with the query
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    commenter_id INTEGER NOT NULL,
+    message_id INTEGER NOT NULL,
+    comment TEXT NOT NULL,
+    time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (commenter_id) REFERENCES users (id),
+    FOREIGN KEY (message_id) REFERENCES main (id)
 );
