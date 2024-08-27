@@ -2,6 +2,7 @@
 -- DROP TABLE IF EXISTS main;
 -- DROP TABLE IF EXISTS private;
 -- DROP TABLE IF EXISTS requests;
+-- DROP TABLE IF EXISTS comments;
 -- -- Old tables below
 -- DROP TABLE IF EXISTS location;
 -- DROP TABLE IF EXISTS picks;

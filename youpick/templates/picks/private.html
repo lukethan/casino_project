@@ -78,6 +78,7 @@
             {% else %}             
                   <form method="post" class="body">
                     <input name="send_id" type="hidden" value="{{ post.sender_id }}">
+                    <input name="private_id" type="hidden" value="{{ post.message_id }}">
                     <textarea rows="4" cols="50" type="text" name="response" placeholder="Enter your response to see the message" style="width: 85% !important; height: 80px;"></textarea><br>
                     <button class="btn btn-primary" name="response_button" type="submit">Submit</button>
                   </form>
