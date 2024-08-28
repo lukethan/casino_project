@@ -4,7 +4,7 @@ from flask import (
 from werkzeug.exceptions import abort
 
 from youpick.auth import login_required
-from .db import db
+from . import db
 from collections import defaultdict
 from sqlalchemy.exc import IntegrityError
 
