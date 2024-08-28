@@ -4,18 +4,19 @@ from flask import Flask, redirect, render_template, url_for
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from . import models
 
     
 load_dotenv()
 
-db = SQLAlchemy
+db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY = os.getenv('SECRET_KEY'),
-        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URL')    
+        SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')    
     )
 
     if test_config is None:
@@ -31,6 +32,10 @@ def create_app(test_config=None):
 
     from .db import init_app
     db.init_app(app)
+    migrate.init_app(app, db)
+
+    with app.app_context():
+        import youpick.models
 
     
     from . import auth
