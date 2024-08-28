@@ -3,6 +3,7 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .db import db
@@ -37,7 +38,7 @@ def register():
                 )
                 db.commit()
             #I like this integrity error, because I was querying the db and then comparing it to request.form
-            except db.IntegrityError:
+            except IntegrityError:
                 error = f"User {username} is already registered."
             else:
                 return redirect(url_for("auth.login"))

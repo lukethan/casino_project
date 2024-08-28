@@ -6,6 +6,7 @@ from werkzeug.exceptions import abort
 from youpick.auth import login_required
 from .db import db
 from collections import defaultdict
+from sqlalchemy.exc import IntegrityError
 
 bp = Blueprint('picks', __name__)
 
@@ -123,7 +124,7 @@ def requests():
             try:
                 db.execute('INSERT INTO requests (request_id, receive_id) VALUES(?, ?)', (g.user["id"], id_receive["id"]))
                 db.commit()
-            except db.IntegrityError:
+            except IntegrityError:
                 status = db.execute('SELECT status FROM requests WHERE request_id =? AND receive_id = ?', ((g.user["id"]), id_receive["id"])).fetchone()
                 if status["status"] == "pending":
                     error = "Request still pending!"
