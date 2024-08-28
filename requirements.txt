@@ -16,4 +16,4 @@ pytest==8.3.2
 python-dotenv==1.0.1
 tomli==2.0.1
 Werkzeug==3.0.3
--e git+ssh://git@github.com/lukethan/youpick.git@9afd605fce2350e4b413c3e08d4417391904f466#egg=youpick
+git+https://github.com/lukethan/youpick.git@e9ee390595066700f758332ee1591fd684a91cec#egg=youpick
