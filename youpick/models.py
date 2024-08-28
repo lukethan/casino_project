@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-from . import db
+from .db import db
 
 #used chatgpt to convert schemas.sql to models
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'users'

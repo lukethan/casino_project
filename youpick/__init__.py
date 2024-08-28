@@ -31,7 +31,7 @@ def create_app(test_config=None):
         pass
 
 
-    from .db import init_app
+    # from .db import init_app
     db.init_app(app)
     migrate.init_app(app, db)
 
