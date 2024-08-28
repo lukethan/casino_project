@@ -32,14 +32,15 @@ def register():
 
         if error is None:
             try:
-                db.execute(
+                db.session.execute(
                     "INSERT INTO users (username, password) VALUES (?, ?)",
                     (username, generate_password_hash(password)),
                 )
-                db.commit()
+                db.session.commit()
             #I like this integrity error, because I was querying the db and then comparing it to request.form
             except IntegrityError:
                 error = f"User {username} is already registered."
+                db.session.rollback()
             else:
                 return redirect(url_for("auth.login"))
 
@@ -58,7 +59,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         error = None
-        user = db.execute(
+        user = db.session.execute(
             'SELECT * FROM users WHERE username = ?', (username,)
         ).fetchone()
         #This is phenomenal in terms of speeding up query and allowing for easier variable setting
