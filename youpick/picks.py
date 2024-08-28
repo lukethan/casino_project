@@ -86,7 +86,6 @@ def make():
         elif not body:
             error = "Please add a body"
         if error == None:
-            db = get_db()
             db.execute('INSERT INTO main (user_id, title, body) VALUES(?,?,?)', (g.user["id"], title, body))
             db.commit()
             return redirect("/")
@@ -108,7 +107,6 @@ def requests():
         elif receive_user1 == g.user["username"]:
             error = "Please select a recipient other than yourself"
         elif error == None:
-            db = get_db()
             id_receive = db.execute('SELECT id FROM users WHERE username = ?', (receive_user1,)).fetchone() 
             if id_receive == None:
                 error = "Please enter valid recipient username"
@@ -145,7 +143,6 @@ def requests():
 @bp.route("/private", methods = ('GET','POST'))
 @login_required
 def private():
-    db = get_db()
     if request.method == "POST":
         if "response_button" in request.form:
             response = request.form.get("response")
