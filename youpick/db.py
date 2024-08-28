@@ -1,9 +1,10 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from . import db, migrate
 
-db = SQLAlchemy()
-migrate = Migrate()
+# db = SQLAlchemy()
+# migrate = Migrate()
 
 def init_app(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # PostgreSQL URL
