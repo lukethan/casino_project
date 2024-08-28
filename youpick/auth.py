@@ -16,13 +16,18 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        confirmation = request.form['confirmation']
         db = get_db()
         error = None
 
-        if not username:
+        if not username.strip():
             error = 'Please enter a username'
-        elif not password:
+        elif not password.strip():
             error = 'Please enter a password'
+        elif not confirmation.strip():
+            error = 'Please confirm your password'
+        elif password.strip() != confirmation.strip():
+            error = 'Confirmation password entered incorrectly'
 
         if error is None:
             try:
