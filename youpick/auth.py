@@ -8,6 +8,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from .db import db
 from .models import User
+from sqlalchemy import text
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 #Sets up the prefix auth for all routes in this module
@@ -32,10 +33,13 @@ def register():
 
         if error is None:
             try:
-                db.session.execute(
-                    "INSERT INTO users (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
-                )
+                sql = text("INSERT INTO users (username, email) VALUES (:username, :email)")
+                params = {'username': 'new_user', 'email': 'new_user@example.com'}
+                db.session.execute(sql, params)
+                    
+                    # "INSERT INTO users (username, password) VALUES (?, ?)",
+                    # (username, generate_password_hash(password)),
+                # )
                 db.session.commit()
             #I like this integrity error, because I was querying the db and then comparing it to request.form
             except IntegrityError:
