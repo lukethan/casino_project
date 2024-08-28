@@ -4,7 +4,6 @@ from flask import Flask, redirect, render_template, url_for
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from . import models
 
     
 load_dotenv()
