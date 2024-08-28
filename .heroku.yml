@@ -1,0 +1,4 @@
+build:
+  config:
+    ENV:
+      GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
