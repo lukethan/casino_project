@@ -486,8 +486,12 @@ article.post {
     margin: 15px 15px 35px 35px;
     flex: 1;
     color: white;
+
 }
 
+.post .body {
+    font-size: 1.3em;
+}
 .post textarea {
     margin-bottom: 0px;
     color: black;
@@ -713,3 +717,33 @@ font-size: 1.3em;
     }
 
 }
+
+#edit {
+    color: white;
+    padding: 20px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    text-align: right; 
+    /* justify-content: space-between; 
+    display: flex; */
+}
+
+#edit form {
+    height: 20px;
+}
+/* copilot */
+
+.link-button, .delete-link {
+    background: none;
+    border: none;
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.link-button:hover, .delete-link:hover {
+    transform: scale(1.1);
+    transition: .3s;
+}
+
+/* copilot */

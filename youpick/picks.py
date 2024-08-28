@@ -45,6 +45,8 @@ def index():
         person_id = request.form.get("person_id")
         post_id = request.form.get("post")
         comment = request.form.get("comment_body")
+        post_delete = request.form.get("delete_id")
+        post_edit = request.form.get("edit_id")
         if "accept" in request.form:
             db.execute("UPDATE requests SET status = ? WHERE receive_id = ? AND request_id = ?", ("accepted", g.user["id"], person_id))
             db.commit()
@@ -59,6 +61,15 @@ def index():
             return redirect('/')
         elif "comment_submit" in request.form and comment == "":
             flash("Please enter a valid comment")
+            return redirect('/')
+        if "delete" in request.form:
+            db.execute("DELETE FROM comments WHERE message_id = ?", (post_delete,))
+            db.execute("DELETE FROM main WHERE id = ?", (post_delete,))
+            db.commit()
+            return redirect('/')
+        if "edit" in request.form:
+            db.execute("UPDATE main SET body = ? WHERE id = ?", (comment, post_edit))
+            db.commit()
             return redirect('/')
 
             
