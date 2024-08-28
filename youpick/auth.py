@@ -5,7 +5,8 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from youpick.db import get_db
+from .db import db
+from .models import User
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 #Sets up the prefix auth for all routes in this module
@@ -80,17 +81,30 @@ def login():
 
     return render_template('auth/login.html')
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
-
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM users WHERE id = ?', (user_id,)
-        ).fetchone()
-        #I like the g variable being used here if there is a session
+        g.user = User.query.get(user_id)
+
+#  @bp.before_app_request
+# def load_logged_in_user():
+#     user_id = session.get('user_id')
+
+#     if user_id is None:
+#         g.user = None
+#     else:
+#         g.user = get_db().execute(
+#             'SELECT * FROM users WHERE id = ?', (user_id,)
+#         ).fetchone()
+#         #I like the g variable being used here if there is a session
 
 @bp.route('/logout')
 def logout():

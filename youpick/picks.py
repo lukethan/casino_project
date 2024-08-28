@@ -4,7 +4,7 @@ from flask import (
 from werkzeug.exceptions import abort
 
 from youpick.auth import login_required
-from youpick.db import get_db
+from .db import db
 from collections import defaultdict
 
 bp = Blueprint('picks', __name__)
