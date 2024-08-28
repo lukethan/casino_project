@@ -1,5 +1,5 @@
 
-from . import db
+from .db import db
 
 #used chatgpt to convert schemas.sql to models
 # db = SQLAlchemy()
