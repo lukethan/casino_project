@@ -33,8 +33,8 @@ def register():
 
         if error is None:
             try:
-                sql = text("INSERT INTO users (username, email) VALUES (:username, :email)")
-                params = {'username': 'new_user', 'email': 'new_user@example.com'}
+                sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
+                params = {'username': username, 'password': (generate_password_hash(password))}
                 db.session.execute(sql, params)
                     
                     # "INSERT INTO users (username, password) VALUES (?, ?)",
