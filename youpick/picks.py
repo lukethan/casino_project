@@ -12,7 +12,7 @@ bp = Blueprint('picks', __name__)
 @bp.route("/", methods = ("GET","POST"))
 @login_required
 def index():
-    db = get_db()
+
     if request.method == "GET":
         picks = db.execute("SELECT post_author.id AS id, main.id AS post_id, post_author.username AS username, main.time AS time, title, body, comments.comment, comment_author.id AS commenter_id, comment_author.username AS commenter_username,  comments.time AS comment_time FROM main JOIN users AS post_author ON main.user_id = post_author.id LEFT JOIN comments ON comments.message_id = main.id LEFT JOIN users AS comment_author ON comments.commenter_id = comment_author.id ORDER BY main.time DESC, comments.time DESC").fetchall()
         pending = db.execute('SELECT username, users.id FROM users JOIN requests ON users.id = requests.request_id WHERE status = "pending" AND receive_id =?', (g.user["id"],))
