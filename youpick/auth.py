@@ -18,7 +18,6 @@ def register():
         username = request.form['username']
         password = request.form['password']
         confirmation = request.form['confirmation']
-        db = get_db()
         error = None
 
         if not username.strip():
