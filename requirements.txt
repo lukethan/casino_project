@@ -25,3 +25,4 @@ tomli==2.0.1
 typing_extensions==4.12.2
 Werkzeug==3.0.3
 git+https://github.com/lukethan/youpick.git@e9ee390595066700f758332ee1591fd684a91cec#egg=youpick
+psycopg2-binary==2.9.9
