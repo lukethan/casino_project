@@ -34,11 +34,23 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
+
+
     # Import and register blueprints within app context to avoid circular imports
     with app.app_context():
         from . import models  # Import models here to ensure they're registered with db
         from . import auth
         from . import picks
+        try:
+            # Ensure all models are imported to register them with SQLAlchemy
+            from .models import User, Main, Private, Request, Comment
+            db.create_all()  # Create database tables
+        except Exception as exception:
+            print("Exception occurred during db.create_all(): " + str(exception))
+        finally:
+            print("db.create_all() was executed.")
+    
+
 
         app.register_blueprint(auth.bp)
         app.register_blueprint(picks.bp)
