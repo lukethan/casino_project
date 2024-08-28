@@ -1,9 +1,16 @@
 blinker==1.8.2
 click==8.1.7
+coverage==7.6.1
+exceptiongroup==1.2.2
 Flask==3.0.3
+iniconfig==2.0.0
 itsdangerous==2.2.0
 Jinja2==3.1.4
 MarkupSafe==2.1.5
+packaging==24.1
+pluggy==1.5.0
+pytest==8.3.2
 python-dotenv==1.0.1
+tomli==2.0.1
 Werkzeug==3.0.3
--e git+ssh://git@github.com/lukethan/youpick.git@75b4feac0fba48727e9eb2fb928dd9ee732227bf#egg=youpick
+-e git+ssh://git@github.com/lukethan/youpick.git@a73d58e761b7933421d1401df5896a2c51cb9aeb#egg=youpick
