@@ -36,10 +36,6 @@ def register():
                 sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
                 params = {'username': username, 'password': (generate_password_hash(password))}
                 db.session.execute(sql, params)
-                    
-                    # "INSERT INTO users (username, password) VALUES (?, ?)",
-                    # (username, generate_password_hash(password)),
-                # )
                 db.session.commit()
             #I like this integrity error, because I was querying the db and then comparing it to request.form
             except IntegrityError:
@@ -63,32 +59,24 @@ def login():
         username = request.form['username']
         password = request.form['password']
         error = None
-        user = db.session.execute(
-            'SELECT * FROM users WHERE username = ?', (username,)
-        ).fetchone()
-        #This is phenomenal in terms of speeding up query and allowing for easier variable setting
-        #It is annoying to specify var = [0]["key"] every time
+        user = User.query.filter_by(username=username).first()
 
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user.password, password):
             error = 'Incorrect password.'
-
-        if error is None:
-            session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
-        #I understand sessions better now and how it is the server checking but can often be stored client side in a cookie
-        #This is why the secret key is set so that the cookie can't be abused
+        else:
+            # Successful login logic
+            flash('Login successful!')
+            return redirect(url_for('picks.index'))  # Redirect to a successful login page
 
         flash(error)
-
     return render_template('auth/login.html')
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
+# class User(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(100), unique=True, nullable=False)
+#     password = db.Column(db.String(200), nullable=False)
 
 @bp.before_app_request
 def load_logged_in_user():

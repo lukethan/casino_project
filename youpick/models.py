@@ -1,8 +1,4 @@
-
 from .db import db
-
-#used chatgpt to convert schemas.sql to models
-# db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -12,11 +8,12 @@ class User(db.Model):
     
     # Relationships
     posts = db.relationship('Main', backref='author', lazy=True)
-    sent_requests = db.relationship('Request', foreign_keys='Request.request_id', backref='sender', lazy=True)
-    received_requests = db.relationship('Request', foreign_keys='Request.receive_id', backref='receiver', lazy=True)
-    comments = db.relationship('Comment', backref='commenter', lazy=True)
-    private_messages = db.relationship('Private', foreign_keys='Private.user_id', backref='sender', lazy=True)
-    received_private_messages = db.relationship('Private', foreign_keys='Private.recipient_id', backref='recipient', lazy=True)
+    who_sent_requests = db.relationship('Request', foreign_keys='Request.request_id', backref='requester', lazy=True)
+    who_received_requests = db.relationship('Request', foreign_keys='Request.receive_id', backref='request_receiver', lazy=True)
+    who_comments = db.relationship('Comment', foreign_keys='Comment.commenter_id', backref='comment_author', lazy=True)
+    who_sent_private_messages = db.relationship('Private', foreign_keys='Private.user_id', backref='message_sender', lazy=True)
+    who_received_private_messages = db.relationship('Private', foreign_keys='Private.recipient_id', backref='message_recipient', lazy=True)
+
 
 
 class Main(db.Model):
@@ -73,5 +70,5 @@ class Comment(db.Model):
     time = db.Column(db.DateTime, server_default=db.func.current_timestamp(), nullable=False)
     
     # Relationships
-    commenter = db.relationship('User', backref='comments')
+    commenter = db.relationship('User', backref='comments')  # This should be unique and not conflict
     message = db.relationship('Main', backref='comments')
