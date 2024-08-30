@@ -5,8 +5,9 @@ from youpick.db import get_db
 #Used flask tutorial to generate these tests
 def test_register(client, app):
     assert client.get('/auth/register').status_code == 200
+
     response = client.post(
-        '/auth/register', data={'username': 'a', 'password': 'a'}
+        '/auth/register', data={'username': 'a', 'password': 'a', 'confirmation': 'a'}
     )
     assert response.headers["Location"] == "/auth/login"
 
@@ -16,15 +17,15 @@ def test_register(client, app):
         ).fetchone() is not None
 
 
-@pytest.mark.parametrize(('username', 'password', 'message'), (
-    ('', '', b'Please enter a username'),
-    ('a', '', b'Please enter a password'),
-    # ('test', 'test', f"User {username} is already registered.".encode('utf-8'))
+@pytest.mark.parametrize(('username', 'password', 'confirmation', 'message'), (
+    ('', '', '', b'Please enter a username'),
+    ('a', '', '', b'Please enter a password'),
+    ('a', 'a', '', b'Please confirm your password')
 ))
-def test_register_validate_input(client, username, password, message):
+def test_register_validate_input(client, username, password, confirmation, message):
     response = client.post(
         '/auth/register',
-        data={'username': username, 'password': password}
+        data={'username': username, 'password': password, 'confirmation': confirmation}
     )
     assert message in response.data
 

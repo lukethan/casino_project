@@ -11,5 +11,3 @@ def test_index(client, auth):
     assert b'Logout' in response.data
     assert b'You Pick!' in response.data
     assert b'Welcome' in response.data
-    # assert b'test\nbody' in response.data
-    # assert b'href="/1/update"' in response.data

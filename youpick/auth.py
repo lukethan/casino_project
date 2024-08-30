@@ -36,11 +36,10 @@ def register():
                     (username, generate_password_hash(password)),
                 )
                 db.commit()
+                return redirect(url_for("auth.login"))
             #I like this integrity error, because I was querying the db and then comparing it to request.form
             except db.IntegrityError:
                 error = f"User {username} is already registered."
-            else:
-                return redirect(url_for("auth.login"))
 
         flash(error)
         #I like how the error is set by the conditional but it doesnt return until the end
@@ -50,7 +49,7 @@ def register():
 
 
 
-#Used the tutorital from flask documentation for the auth setup
+#Used the tutorial from flask documentation for the auth setup
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
