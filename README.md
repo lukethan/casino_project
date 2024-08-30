@@ -1,6 +1,6 @@
 # YouPick
 ### By: Luke O'Neil
-#### Video Demo:  <URL HERE>
+#### Video Demo:  <https://youtu.be/shYtS5Cvhgg>
 #### Description:
 This is my submission for CS50x's Final Project. Using flask, I created a web app called "YouPick." My inspiration was asking a friend or significant other where they wanted to eat and getting the normal response of, "Oh, I don't care, you pick!" I wanted to create an application where a user could type a prompt, such as "What do you want for dinner tonight?" and then respond to the prompt themselves. They send this prompt and response to another user and after they type their response as well, the sender's message is revealed! That way, both parties get to see the other person's choices at the same time.
 
